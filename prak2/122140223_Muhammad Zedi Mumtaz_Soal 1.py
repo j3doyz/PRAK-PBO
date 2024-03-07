@@ -36,14 +36,14 @@ class Mahasiswa:
     def tahun_kelulusan(self):
         return self.__angkatan + 4 if self.__isMahasiswa else "Tidak berlaku"
 
-mahasiswa1 = Mahasiswa("122140123", "Sakti Mujahid", 2022)
+mahasiswa1 = Mahasiswa("122140223", "Muhammad Zedi Mumtaz", 2022)
 print(mahasiswa1.info())
 print("Status Mahasiswa:", mahasiswa1.status_mahasiswa()) 
 print("Tahun Kelulusan Perkiraan:", mahasiswa1.tahun_kelulusan())
 
 print("\n")
 
-mahasiswa2 = Mahasiswa("125140123", "Imani", 2025, isMahasiswa=False)
+mahasiswa2 = Mahasiswa("123140222", "Jedoy", 2023, isMahasiswa=False)
 print(mahasiswa2.info())
 print("Status Mahasiswa:", mahasiswa2.status_mahasiswa())
 print("Tahun Kelulusan Perkiraan:", mahasiswa2.tahun_kelulusan())
