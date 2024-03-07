@@ -2,71 +2,54 @@
 # 122140223
 # Tugas Praktikum PBO RB Minggu 2 Soal 2
 
-def validate_price(func):
-    def wrapper(*args, **kwargs):
-        harga = kwargs.get('harga')
-        if harga is not None and not isinstance(harga, (int, float)):
-            raise ValueError("Harga harus berupa nilai numerik.")
-        return func(*args, **kwargs)
-    return wrapper
-
-class Buku:
-    def __init__(self, judul, pengarang, harga):
-        self.judul = judul
-        self.pengarang = pengarang
+class Gitar:
+    def __init__(self, merek, model, harga):
+        self.merek = merek
+        self.model = model
         self.harga = harga
 
     def __str__(self):
-        return f"{self.judul} oleh {self.pengarang} - Rp {self.harga}"
+        return f"{self.merek} {self.model} - Rp {self.harga}"
 
     def __del__(self):
-        print(f"Buku '{self.judul}' telah terjual habis dan dihapus dari inventaris.")
+        print(f"Gitar {self.merek} {self.model} telah terjual.")
 
-class TokoBuku:
-    def __init__(self):
-        self.inventaris = []
+def catat_terjual(func):
+    def wrapper(self, indeks):
+        gitar_terjual = self.gitar[indeks]
+        del self.gitar[indeks]
+        func(self, indeks)
+        print(f"Gitar {gitar_terjual.merek} {gitar_terjual.model} telah terjual.")
+    return wrapper
 
-    def tambah_buku(self, judul, pengarang, harga):
-        buku = Buku(judul, pengarang, harga)
-        self.inventaris.append(buku)
+class TokoGitar:
+    def __init__(self, nama):
+        self.nama = nama
+        self.gitar = []
 
-    def daftar_buku(self):
-        if not self.inventaris:
-            print("Tidak ada buku tersedia di toko.")
+    @catat_terjual
+    def beli_gitar(self, merek, model, harga):
+        gitar = Gitar(merek, model, harga)
+        self.gitar.append(gitar)
+        print(f"{merek} {model} telah ditambahkan ke penyimpanan.")
+
+    def tampilkan_penyimpanan(self):
+        if not self.gitar:
+            print("Penyimpanan kosong.")
         else:
-            print("\nBuku yang Tersedia:")
-            for idx, buku in enumerate(self.inventaris, 1):
-                print(f"{idx}. {buku}")
+            print(f"Penyimpanan {self.nama}:")
+            for idx, gitar in enumerate(self.gitar):
+                print(f"{idx + 1}. {gitar}")
 
-    def jual_buku(self, judul):
-        for buku in self.inventaris:
-            if buku.judul == judul:
-                print(f"Terjual: {buku}")
-                self.inventaris.remove(buku)
-                del buku
-                return
-        print(f"Maaf, '{judul}' tidak tersedia di toko.")
+# Contoh penggunaan:
+toko = TokoGitar("MZM Gitar")
 
-class Customer:
-    def __init__(self, name):
-        self.name = name
+toko.beli_gitar("Fender", "Stratocaster", 15000000)
+toko.beli_gitar("Gibson", "Les Paul", 20000000)
+toko.beli_gitar("Taylor", "814ce", 25000000)
 
-    def __str__(self):
-        return f"Pelanggan: {self.name}"
+toko.tampilkan_penyimpanan()
 
-    def __del__(self):
-        print(f"{self.name} telah membeli semua buku yang tersisa di toko.")
-
-toko_buku = TokoBuku()
-toko_buku.tambah_buku("DETEKTIF CONAN", "Gosho Aoyama", 25000)
-toko_buku.tambah_buku("NARUTO", "Masashi Kishimoto", 30000)
-toko_buku.tambah_buku("ONE PIECE", "Eiichiro Oda", 35000)
-
-toko_buku.daftar_buku()
-
-toko_buku.jual_buku("DETEKTIF CONAN")
-
-toko_buku.daftar_buku()
-
-pelanggan = Customer("Sakti")
-print(pelanggan)
+# Simulasi habis terjual
+toko.beli_gitar(0)
+toko.tampilkan_penyimpanan()
